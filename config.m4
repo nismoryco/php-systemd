@@ -33,21 +33,12 @@ if test "$PHP_SYSTEMD" != "no"; then
   PHP_ADD_INCLUDE($SYSTEMD_DIR/include)
 
   LIBNAME=systemd
-  LIBSYMBOL=sd_journal_sendv
 
   if test "x$PHP_LIBDIR" = "x"; then
     PHP_LIBDIR=lib
   fi
 
-  PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
-  [
-    PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $SYSTEMD_DIR/$PHP_LIBDIR, SYSTEMD_SHARED_LIBADD)
-  ],[
-    AC_MSG_ERROR([wrong systemd version {44.+ is required} or lib not found])
-  ],[
-    -L$SYSTEMD_DIR/$PHP_LIBDIR 
-  ])
-
+  PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $SYSTEMD_DIR/$PHP_LIBDIR, SYSTEMD_SHARED_LIBADD)
   PHP_ADD_EXTENSION_DEP(systemd, sockets, true)
   PHP_SUBST(SYSTEMD_SHARED_LIBADD)
   PHP_NEW_EXTENSION(systemd, systemd.c, $ext_shared)
